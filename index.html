@@ -37,16 +37,16 @@
         <!-- Kiosk View -->
         <div id="kiosk-view" class="view-content">
             <div class="p-6 mx-auto">
-                <div class="bg-white shadow rounded-lg p-6">
+                <!-- Service Selection Menu -->
+                <div id="service-selection" class="bg-white shadow rounded-lg p-6">
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-3xl font-semibold flex items-center gap-2">
-                                <i class="fas fa-ticket-alt text-brand-green"></i>
-                                Get Your Queue Number
+                                Select Service Type
                             </h2>
                             <p class="text-base text-gray-600 mt-1 flex items-center gap-2">
-                                <i class="fas fa-language text-gray-400"></i>
-                                Select language and tap to get a ticket.
+                                <i class="fas fa-hand-point-right text-gray-400"></i>
+                                Choose the type of transaction you need.
                             </p>
                         </div>
                         <div class="text-sm">
@@ -59,7 +59,141 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Collections Menu -->
+                        <div class="px-6 py-10 rounded-lg shadow transition-colors cursor-pointer" onclick="showSubMenu('collections')">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-arrow-down text-blue-600 text-2xl"></i>
+                                <h3 class="text-xl font-semibold text-blue-800">Collections</h3>
+                            </div>
+                        </div>
+
+                        <!-- Disbursements Menu -->
+                        <div class="px-6 py-10 rounded-lg shadow transition-colors cursor-pointer" onclick="showSubMenu('disbursements')">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-arrow-up text-red-600 text-2xl"></i>
+                                <h3 class="text-xl font-semibold text-red-800">Disbursements</h3>
+                            </div>
+                        </div>
+
+                        <!-- Other Transactions Menu -->
+                        <div class="px-6 py-10 rounded-lg shadow transition-colors cursor-pointer" onclick="showSubMenu('other')">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-exchange-alt text-green-600 text-2xl"></i>
+                                <h3 class="text-xl font-semibold text-green-800">Other Transactions</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collections Submenu -->
+                <div id="collections-submenu" class="bg-white shadow rounded-lg p-6 hidden">
+                    <div class="flex items-center gap-2 mb-4">
+                        <button onclick="showServiceSelection()" class="p-2 rounded transition-colors">
+                            <i class="fas fa-arrow-left text-gray-600"></i>
+                        </button>
+                        <h2 class="text-2xl font-semibold text-blue-800 flex items-center gap-2">
+                            Collections - Incoming Transactions
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black transition-colors" data-service="patient-payments">
+                            <i class="fas fa-user-injured text-2xl mb-2"></i>
+                            <div class="font-semibold">Patient Payments</div>
+                            <div class="text-xs text-neutral-500">Hospital bills, consultations, lab fees</div>
+                        </button>
+
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black transition-colors" data-service="health-insurance">
+                            <i class="fas fa-shield-alt text-2xl mb-2"></i>
+                            <div class="font-semibold">Health Insurance / HMO</div>
+                            <div class="text-xs text-neutral-500">Insurance claims and HMO payments</div>
+                        </button>
+
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black transition-colors" data-service="philhealth">
+                            <i class="fas fa-heart text-2xl mb-2"></i>
+                            <div class="font-semibold">PhilHealth Reimbursements</div>
+                            <div class="text-xs text-neutral-500">PhilHealth claim processing</div>
+                        </button>
+
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black transition-colors" data-service="misc-payments">
+                            <i class="fas fa-receipt text-2xl mb-2"></i>
+                            <div class="font-semibold">Miscellaneous Payments</div>
+                            <div class="text-xs text-neutral-500">Other payment transactions</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Disbursements Submenu -->
+                <div id="disbursements-submenu" class="bg-white shadow rounded-lg p-6 hidden">
+                    <div class="flex items-center gap-2 mb-4">
+                        <button onclick="showServiceSelection()" class="p-2 rounded transition-colors">
+                            <i class="fas fa-arrow-left text-gray-600"></i>
+                        </button>
+                        <h2 class="text-2xl font-semibold text-red-800 flex items-center gap-2">
+                            Disbursements - Outgoing Transactions
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black shadow transition-colors" data-service="refunds">
+                            <i class="fas fa-undo text-2xl mb-2"></i>
+                            <div class="font-semibold">Refunds</div>
+                            <div class="text-xs text-neutral-500">Payment refunds and reversals</div>
+                        </button>
+
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black shadow transition-colors" data-service="reimbursements">
+                            <i class="fas fa-hand-holding-usd text-2xl mb-2"></i>
+                            <div class="font-semibold">Reimbursements</div>
+                            <div class="text-xs text-neutral-500">Employee and patient reimbursements</div>
+                        </button>
+
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black shadow transition-colors md:col-span-2" data-service="doctor-payments">
+                            <i class="fas fa-user-md text-2xl mb-2"></i>
+                            <div class="font-semibold">Payment to Doctors (PF sharing)</div>
+                            <div class="text-xs text-neutral-500">Professional fee sharing and doctor payments</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Other Transactions Submenu -->
+                <div id="other-submenu" class="bg-white shadow rounded-lg p-6 hidden">
+                    <div class="flex items-center gap-2 mb-4">
+                        <button onclick="showServiceSelection()" class="p-2 rounded transition-colors">
+                            <i class="fas fa-arrow-left text-gray-600"></i>
+                        </button>
+                        <h2 class="text-2xl font-semibold text-green-800 flex items-center gap-2">
+                            Other Transactions
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="service-button p-4 rounded-lg border-2 border-transparent hover:border-black shadow transition-colors md:col-span-2" data-service="general-inquiry">
+                            <i class="fas fa-question-circle text-2xl mb-2"></i>
+                            <div class="font-semibold">General Inquiry</div>
+                            <div class="text-xs text-neutral-500">General questions and other services</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ticket Type Selection -->
+                <div id="ticket-type-selection" class="bg-white shadow rounded-lg p-6 hidden">
+                    <div class="flex items-center gap-2 mb-4">
+                        <button onclick="goBackToSubmenu()" class="p-2 rounded transition-colors">
+                            <i class="fas fa-arrow-left text-gray-600"></i>
+                        </button>
+                        <h2 class="text-2xl font-semibold flex items-center gap-2">
+                            <i class="fas fa-ticket-alt text-brand-green"></i>
+                            <span id="selected-service-title">Get Your Queue Number</span>
+                        </h2>
+                    </div>
+
+                    <p class="text-base text-gray-600 mb-6 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-gray-400"></i>
+                        Select your ticket type for: <span id="selected-service-name" class="font-semibold text-brand-green"></span>
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <button id="regular-ticket" class="p-8 bg-neutral-900 text-white rounded shadow text-2xl flex items-center justify-center gap-3 hover:bg-black transition-colors">
                             <i class="fas fa-user text-3xl"></i>
                             <div>Get Regular Ticket</div>
@@ -79,16 +213,32 @@
                             <i class="fas fa-hashtag text-brand-green"></i>
                             <span></span>
                         </div>
+                        <div id="ticket-service" class="text-sm font-medium text-brand-green flex items-center gap-2">
+                            <i class="fas fa-tag text-gray-500"></i>
+                            <span></span>
+                        </div>
                         <div id="ticket-wait" class="text-base text-gray-600 flex items-center gap-2">
                             <i class="fas fa-clock text-gray-400"></i>
                             <span></span>
                         </div>
                         <div class="mt-2 text-xs text-gray-400 flex items-center gap-2">
-                            <i class="fas fa-info-circle"></i>
                             (This is a prototype. A printed stub would be generated in production.)
+                        </div>
+
+                        <!-- Add Another Transaction Button -->
+                        <div class="mt-4 pt-3 border-t border-gray-200">
+                            <button id="add-another-transaction" class="w-full px-4 py-2 text-emerald-600 rounded-lg hover:text-emerald-700 font-medium transition-colors flex items-center justify-center gap-2 mb-2">
+                                <i class="fas fa-plus"></i>
+                                Add Another Transaction
+                            </button>
+                            <button id="no-more-transactions" class="w-full px-4 py-2 text-red-500 rounded-lg hover:text-red-600 font-medium transition-colors flex items-center justify-center gap-2">
+                                <i class="fas fa-times"></i>
+                                No, I'm Done
+                            </button>
                         </div>
                     </div>
                 </div>
+
                 <div class="mt-6 text-xs text-gray-500">Tip: Click "Display" in the top nav to see how the waiting area looks.</div>
             </div>
         </div>
@@ -108,7 +258,7 @@
                                 Real-time queue board
                             </div>
                         </div>
-                        <div class="text-right">
+                        <div class="flex flex-col items-end gap-2 text-right">
                             <div id="current-time" class="text-sm text-gray-400 flex items-center gap-2">
                                 <i class="fas fa-clock"></i>
                                 <span></span>
@@ -362,10 +512,18 @@
         let counters = ['Counter 1', 'Counter 2', 'Counter 3'];
         let language = 'EN';
         let announcement = '';
+        let selectedService = null;
+        let currentSubmenu = null;
 
         // Helper functions
         function issueTicket(priority = null) {
-            const ticket = { num: nextNumber, ts: Date.now(), priority };
+            const ticket = {
+                num: nextNumber,
+                ts: Date.now(),
+                priority,
+                service: selectedService ? selectedService.type : 'general',
+                serviceName: selectedService ? selectedService.name : 'General Service'
+            };
             queue.push(ticket);
             nextNumber++;
             updateUI();
@@ -438,13 +596,14 @@
 
             const queueList = document.getElementById('queue-list');
             if (queue.length === 0) {
-                queueList.innerHTML = '<div class="text-sm text-gray-400">No waiting tickets</div>';
+                queueList.innerHTML = '<div class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-hourglass-empty"></i>No waiting tickets</div>';
             } else {
                 queueList.innerHTML = queue.slice(0, 6).map(t => `
                     <div class="flex justify-between items-center p-2 border rounded">
                         <div>
                             <div class="font-bold">${t.num}</div>
                             <div class="text-xs text-gray-400">${t.priority ? `Priority: ${t.priority}` : 'Regular'}</div>
+                            <div class="text-xs text-brand-green">${t.serviceName || 'General Service'}</div>
                         </div>
                         <div class="text-xs text-gray-400">${new Date(t.ts).toLocaleTimeString()}</div>
                     </div>
@@ -458,13 +617,14 @@
             
             const cashierQueueList = document.getElementById('cashier-queue-list');
             if (queue.length === 0) {
-                cashierQueueList.innerHTML = '<div class="text-sm text-gray-400">No waiting tickets</div>';
+                cashierQueueList.innerHTML = '<div class="text-sm text-gray-400 flex items-center gap-2"><i class="fas fa-hourglass-empty"></i>No waiting tickets</div>';
             } else {
                 cashierQueueList.innerHTML = queue.map(t => `
                     <div class="flex items-center justify-between p-2 border rounded">
                         <div>
                             <div class="font-bold">${t.num}</div>
                             <div class="text-xs text-gray-400">${t.priority ? `Priority: ${t.priority}` : 'Regular'}</div>
+                            <div class="text-xs text-brand-green">${t.serviceName || 'General Service'}</div>
                         </div>
                         <div class="space-x-2">
                             <button onclick="forceCallTicket(${t.num})" class="px-2 py-1 rounded bg-brand-green text-white text-sm">Call</button>
@@ -503,21 +663,126 @@
                 queue.splice(ticketIndex, 1);
                 currentServing = { ...ticket, counter: selectedCounter };
                 announcement = `Now serving ${ticket.num} at ${selectedCounter}`;
-                
+
                 setTimeout(() => {
                     announcement = '';
                     updateUI();
                 }, 4000);
-                
+
                 updateUI();
             }
+        }
+
+        // Service Selection Navigation Functions
+        function showServiceSelection() {
+            document.getElementById('service-selection').classList.remove('hidden');
+            document.getElementById('collections-submenu').classList.add('hidden');
+            document.getElementById('disbursements-submenu').classList.add('hidden');
+            document.getElementById('other-submenu').classList.add('hidden');
+            document.getElementById('ticket-type-selection').classList.add('hidden');
+            currentSubmenu = null;
+            selectedService = null;
+        }
+
+        function showSubMenu(menuType) {
+            document.getElementById('service-selection').classList.add('hidden');
+            document.getElementById('collections-submenu').classList.add('hidden');
+            document.getElementById('disbursements-submenu').classList.add('hidden');
+            document.getElementById('other-submenu').classList.add('hidden');
+            document.getElementById('ticket-type-selection').classList.add('hidden');
+
+            document.getElementById(`${menuType}-submenu`).classList.remove('hidden');
+            currentSubmenu = menuType;
+        }
+
+        function selectService(serviceType, serviceName) {
+            selectedService = { type: serviceType, name: serviceName };
+            document.getElementById('selected-service-name').textContent = serviceName;
+            document.getElementById('service-selection').classList.add('hidden');
+            document.getElementById('collections-submenu').classList.add('hidden');
+            document.getElementById('disbursements-submenu').classList.add('hidden');
+            document.getElementById('other-submenu').classList.add('hidden');
+            document.getElementById('ticket-type-selection').classList.remove('hidden');
+            // Enable ticket buttons when a new service is selected
+            enableTicketButtons();
+        }
+
+        function goBackToSubmenu() {
+            if (currentSubmenu) {
+                document.getElementById('ticket-type-selection').classList.add('hidden');
+                document.getElementById(`${currentSubmenu}-submenu`).classList.remove('hidden');
+            } else {
+                showServiceSelection();
+            }
+            selectedService = null;
+        }
+
+        // Service name mappings
+        const serviceNames = {
+            'patient-payments': 'Patient Payments',
+            'health-insurance': 'Health Insurance / HMO',
+            'philhealth': 'PhilHealth Reimbursements',
+            'misc-payments': 'Miscellaneous Payments',
+            'refunds': 'Refunds',
+            'reimbursements': 'Reimbursements',
+            'doctor-payments': 'Payment to Doctors (PF)',
+            'general-inquiry': 'General Inquiry'
+        };
+
+        // Helper function to disable ticket buttons
+        function disableTicketButtons() {
+            const regularBtn = document.getElementById('regular-ticket');
+            const priorityBtn = document.getElementById('priority-ticket');
+
+            regularBtn.disabled = true;
+            priorityBtn.disabled = true;
+            regularBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            priorityBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            regularBtn.classList.remove('hover:bg-black');
+            priorityBtn.classList.remove('hover:bg-emerald-700');
+        }
+
+        // Helper function to enable ticket buttons
+        function enableTicketButtons() {
+            const regularBtn = document.getElementById('regular-ticket');
+            const priorityBtn = document.getElementById('priority-ticket');
+
+            regularBtn.disabled = false;
+            priorityBtn.disabled = false;
+            regularBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            priorityBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            regularBtn.classList.add('hover:bg-black');
+            priorityBtn.classList.add('hover:bg-emerald-700');
+        }
+
+        // Add Another Transaction function
+        function addAnotherTransaction() {
+            // Hide ticket display and return to service selection
+            document.getElementById('ticket-display').classList.add('hidden');
+            // Re-enable ticket buttons for next transaction
+            enableTicketButtons();
+            showServiceSelection();
+        }
+
+        // No More Transactions function
+        function noMoreTransactions() {
+            // Hide ticket display and return to service selection (main page)
+            document.getElementById('ticket-display').classList.add('hidden');
+            // Re-enable ticket buttons for next session
+            enableTicketButtons();
+            showServiceSelection();
         }
 
         // Navigation
         function showView(viewName) {
             document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`${viewName}-view`).classList.remove('hidden');
-            
+
+            // Reset kiosk to service selection when switching to kiosk view
+            if (viewName === 'kiosk') {
+                showServiceSelection();
+            }
+
             // Update nav buttons
             document.querySelectorAll('[id^="nav-"]').forEach(btn => {
                 btn.className = 'px-3 py-1 rounded bg-gray-100 text-gray-700 flex items-center gap-2 hover:bg-gray-200 transition-colors';
@@ -528,7 +793,7 @@
             activeBtn.className = 'px-3 py-1 rounded bg-gray-100 text-brand-green flex items-center gap-2 hover:bg-gray-200 transition-colors';
             const icon = activeBtn.querySelector('i');
             if (icon) icon.className = icon.className.replace(/text-\S+/, '') + '';
-            
+
             currentView = viewName;
             updateUI();
         }
@@ -541,20 +806,41 @@
             document.getElementById('nav-cashier').addEventListener('click', () => showView('cashier'));
             document.getElementById('nav-admin').addEventListener('click', () => showView('admin'));
 
-            // Kiosk
+            // Kiosk - Service Selection
+            document.querySelectorAll('.service-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const serviceType = button.getAttribute('data-service');
+                    const serviceName = serviceNames[serviceType];
+                    selectService(serviceType, serviceName);
+                });
+            });
+
+            // Kiosk - Ticket Generation
             document.getElementById('regular-ticket').addEventListener('click', () => {
                 const ticket = issueTicket();
                 document.getElementById('ticket-number').querySelector('span').textContent = ticket.num;
+                document.getElementById('ticket-service').querySelector('span').textContent = ticket.serviceName;
                 document.getElementById('ticket-wait').querySelector('span').textContent = `Estimated wait: ~${Math.max(1, Math.ceil(queue.length / counters.length))} turns`;
                 document.getElementById('ticket-display').classList.remove('hidden');
+                // Disable ticket buttons after generating ticket
+                disableTicketButtons();
             });
 
             document.getElementById('priority-ticket').addEventListener('click', () => {
                 const ticket = issueTicket('PWD');
                 document.getElementById('ticket-number').querySelector('span').textContent = ticket.num;
+                document.getElementById('ticket-service').querySelector('span').textContent = ticket.serviceName;
                 document.getElementById('ticket-wait').querySelector('span').textContent = `Estimated wait: ~${Math.max(1, Math.ceil(queue.length / counters.length))} turns`;
                 document.getElementById('ticket-display').classList.remove('hidden');
+                // Disable ticket buttons after generating ticket
+                disableTicketButtons();
             });
+
+            // Add Another Transaction button
+            document.getElementById('add-another-transaction').addEventListener('click', addAnotherTransaction);
+
+            // No More Transactions button
+            document.getElementById('no-more-transactions').addEventListener('click', noMoreTransactions);
 
             // Cashier
             document.getElementById('call-next').addEventListener('click', () => {
@@ -601,12 +887,20 @@
                 currentServing = null;
                 announcement = '';
                 nextNumber = 101;
+                selectedService = null;
+                currentSubmenu = null;
+                if (currentView === 'kiosk') {
+                    showServiceSelection();
+                }
                 updateUI();
             });
 
             // Initialize UI
             updateUI();
-            
+
+            // Initialize kiosk view to show service selection
+            showServiceSelection();
+
             // Update time every second
             setInterval(() => {
                 if (currentView === 'display') {
