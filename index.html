@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Davao Doctors - Queuing System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.2/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body class="min-h-screen bg-slate-50">
+    <!-- Top Navigation -->
+    <div class="flex items-center justify-between p-3 bg-white text-gray-800 shadow-sm border-b border-gray-200">
+        <!-- <div class="text-xl font-semibold text-brand-green">Davao Doctors - Queuing</div> -->
+         <img src="./images/logo.png" alt="Davao Doctors Logo" class="h-auto w-[220px] object-contain">
+        <div class="flex gap-2">
+            <button id="nav-kiosk" class="px-3 py-1 rounded bg-gray-100 text-brand-green flex items-center gap-2 hover:bg-gray-200 transition-colors">
+                <i class="fas fa-desktop"></i> Kiosk
+            </button>
+            <button id="nav-display" class="px-3 py-1 rounded bg-gray-100 text-gray-700 flex items-center gap-2 hover:bg-gray-200 transition-colors">
+                <i class="fas fa-tv"></i> Display
+            </button>
+            <button id="nav-cashier" class="px-3 py-1 rounded bg-gray-100 text-gray-700 flex items-center gap-2 hover:bg-gray-200 transition-colors">
+                <i class="fas fa-cash-register"></i> Cashier
+            </button>
+            <button id="nav-admin" class="px-3 py-1 rounded bg-gray-100 text-gray-700 flex items-center gap-2 hover:bg-gray-200 transition-colors">
+                <i class="fas fa-cog"></i> Admin
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto py-6">
+        <!-- Kiosk View -->
+        <div id="kiosk-view" class="view-content">
+            <div class="p-6 mx-auto">
+                <div class="bg-white shadow rounded-lg p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 class="text-3xl font-semibold flex items-center gap-2">
+                                <i class="fas fa-ticket-alt text-brand-green"></i>
+                                Get Your Queue Number
+                            </h2>
+                            <p class="text-base text-gray-600 mt-1 flex items-center gap-2">
+                                <i class="fas fa-language text-gray-400"></i>
+                                Select language and tap to get a ticket.
+                            </p>
+                        </div>
+                        <div class="text-sm">
+                            <label class="mr-2">Language</label>
+                            <select id="kiosk-language" class="rounded p-1 border">
+                                <option value="EN">English</option>
+                                <option value="PH">Filipino</option>
+                                <option value="BS">Bisaya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button id="regular-ticket" class="p-8 bg-neutral-900 text-white rounded shadow text-2xl flex items-center justify-center gap-3 hover:bg-black transition-colors">
+                            <i class="fas fa-user text-3xl"></i>
+                            <div>Get Regular Ticket</div>
+                        </button>
+                        <button id="priority-ticket" class="p-8 bg-emerald-600 text-white rounded shadow text-2xl flex items-center justify-center gap-3 hover:bg-emerald-700 transition-colors">
+                            <i class="fas fa-wheelchair text-3xl"></i>
+                            <div>Priority (PWD/Senior)</div>
+                        </button>
+                    </div>
+
+                    <div id="ticket-display" class="mt-6 p-4 bg-gray-50 rounded border hidden">
+                        <div class="text-base text-gray-700 flex items-center gap-2">
+                            <i class="fas fa-receipt text-gray-500"></i>
+                            Your Ticket
+                        </div>
+                        <div id="ticket-number" class="text-4xl font-bold flex items-center gap-2">
+                            <i class="fas fa-hashtag text-brand-green"></i>
+                            <span></span>
+                        </div>
+                        <div id="ticket-wait" class="text-base text-gray-600 flex items-center gap-2">
+                            <i class="fas fa-clock text-gray-400"></i>
+                            <span></span>
+                        </div>
+                        <div class="mt-2 text-xs text-gray-400 flex items-center gap-2">
+                            <i class="fas fa-info-circle"></i>
+                            (This is a prototype. A printed stub would be generated in production.)
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 text-xs text-gray-500">Tip: Click "Display" in the top nav to see how the waiting area looks.</div>
+            </div>
+        </div>
+
+        <!-- Display View -->
+        <div id="display-view" class="view-content hidden">
+            <div class="p-6">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h2 class="text-3xl font-bold flex items-center gap-2">
+                                <i class="fas fa-bullhorn text-brand-green"></i>
+                                Now Serving
+                            </h2>
+                            <div class="text-base text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-broadcast-tower text-gray-400"></i>
+                                Real-time queue board
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div id="current-time" class="text-sm text-gray-400 flex items-center gap-2">
+                                <i class="fas fa-clock"></i>
+                                <span></span>
+                            </div>
+                            <div id="counter-count" class="text-xs text-gray-400 flex items-center gap-2">
+                                <i class="fas fa-users"></i>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="col-span-1 md:col-span-2 bg-brand-green-light p-6 rounded">
+                            <div class="text-base text-gray-700 flex items-center gap-2">
+                                <i class="fas fa-hand-point-right text-brand-green"></i>
+                                Now Serving
+                            </div>
+                            <div id="serving-number" class="text-8xl font-extrabold mt-2">—</div>
+                            <div id="serving-counter" class="mt-2 text-xl text-gray-700 flex items-center gap-2">
+                                <i class="fas fa-map-marker-alt text-gray-500"></i>
+                                <span>Waiting</span>
+                            </div>
+                            <div id="announcement-display" class="mt-4 p-3 bg-white rounded shadow-sm text-sm text-brand-green hidden flex items-center gap-2">
+                                <i class="fas fa-volume-up text-brand-green"></i>
+                                <span></span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded shadow">
+                            <div class="text-base text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-list-ol text-gray-400"></i>
+                                Next in line
+                            </div>
+                            <div id="queue-list" class="mt-3 space-y-2">
+                                <div class="text-sm text-gray-400 flex items-center gap-2">
+                                    <i class="fas fa-hourglass-empty"></i>
+                                    No waiting tickets
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-xs text-gray-500">Footer: Scrolling announcements / hospital notes would appear here.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cashier View -->
+        <div id="cashier-view" class="view-content hidden">
+            <div class="p-6 mx-auto">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-semibold flex items-center gap-2">
+                                <i class="fas fa-cash-register text-sky-600"></i>
+                                Cashier Workstation
+                            </h2>
+                            <div class="text-base text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-tasks text-gray-400"></i>
+                                Call and manage tickets
+                            </div>
+                        </div>
+                        <div>
+                            <select id="counter-select" class="p-2 border rounded">
+                                <option value="Counter 1">Counter 1</option>
+                                <option value="Counter 2">Counter 2</option>
+                                <option value="Counter 3">Counter 3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 grid md:grid-cols-3 gap-4">
+                        <div class="col-span-1">
+                            <div class="p-4 bg-sky-50 rounded">
+                                <div class="text-base text-gray-600 flex items-center gap-2">
+                                    <i class="fas fa-user-clock text-sky-600"></i>
+                                    Current Ticket
+                                </div>
+                                <div id="current-ticket-number" class="text-6xl font-bold mt-2">—</div>
+                                <div id="current-ticket-counter" class="mt-2 text-xs text-gray-400 flex items-center gap-1">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>No one being served</span>
+                                </div>
+
+                                <div class="mt-4 flex space-x-2">
+                                    <button id="call-next" class="px-3 py-2 bg-sky-600 text-white rounded flex items-center gap-2 hover:bg-sky-700 transition-colors">
+                                        <i class="fas fa-phone"></i> Call Next
+                                    </button>
+                                    <button id="recall-current" class="px-3 py-2 bg-white border rounded flex items-center gap-2 hover:bg-gray-50 transition-colors">
+                                        <i class="fas fa-redo"></i> Recall
+                                    </button>
+                                </div>
+
+                                <div class="mt-3 flex space-x-2">
+                                    <button id="complete-current" class="px-3 py-2 bg-emerald-600 text-white rounded flex items-center gap-2 hover:bg-emerald-700 transition-colors">
+                                        <i class="fas fa-check"></i> Complete
+                                    </button>
+                                    <button id="skip-current" class="px-3 py-2 bg-yellow-400 text-black rounded flex items-center gap-2 hover:bg-yellow-500 transition-colors">
+                                        <i class="fas fa-forward"></i> Skip
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-span-2">
+                            <div class="p-4 bg-white rounded border">
+                                <div class="text-base text-gray-600 flex items-center gap-2">
+                                    <i class="fas fa-list text-gray-400"></i>
+                                    Waiting Queue
+                                </div>
+                                <div id="cashier-queue-list" class="mt-3 grid gap-2">
+                                    <div class="text-sm text-gray-400 flex items-center gap-2">
+                                        <i class="fas fa-hourglass-empty"></i>
+                                        No waiting tickets
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 p-4 bg-gray-50 rounded border">
+                                <div class="text-base text-gray-600 flex items-center gap-2">
+                                    <i class="fas fa-bolt text-gray-400"></i>
+                                    Quick actions
+                                </div>
+                                <div class="mt-2 flex space-x-2">
+                                    <button id="clear-queue" class="px-3 py-2 bg-red-500 text-white rounded flex items-center gap-2 hover:bg-red-600 transition-colors">
+                                        <i class="fas fa-trash"></i> Clear Queue
+                                    </button>
+                                    <button id="simulate-emergency" class="px-3 py-2 bg-amber-500 text-white rounded flex items-center gap-2 hover:bg-amber-600 transition-colors">
+                                        <i class="fas fa-exclamation-triangle"></i> Simulate Emergency
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-gray-500">Tip: Use the "Simulate Emergency" button to see priority handling.</div>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="admin-view" class="view-content hidden">
+            <div class="p-6 mx-auto">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-3xl font-semibold flex items-center gap-2">
+                        <i class="fas fa-tools text-brand-green"></i>
+                        Admin Panel
+                    </h2>
+                    <div class="mt-4 grid md:grid-cols-2 gap-4">
+                        <div class="p-4 border rounded">
+                            <div class="text-base text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-desktop text-gray-400"></i>
+                                Counters
+                            </div>
+                            <ul id="counter-list" class="mt-3 space-y-2">
+                                <li class="flex justify-between items-center">
+                                    <div>Counter 1</div>
+                                    <div class="text-xs text-gray-400">remove</div>
+                                </li>
+                                <li class="flex justify-between items-center">
+                                    <div>Counter 2</div>
+                                    <div class="text-xs text-gray-400">remove</div>
+                                </li>
+                                <li class="flex justify-between items-center">
+                                    <div>Counter 3</div>
+                                    <div class="text-xs text-gray-400">remove</div>
+                                </li>
+                            </ul>
+
+                            <div class="mt-3 flex gap-2">
+                                <input id="new-counter-name" class="p-2 border rounded flex-1" placeholder="Add counter name" />
+                                <button id="add-counter" class="px-3 py-2 bg-brand-green text-white rounded flex items-center gap-2 bg-brand-green-hover transition-colors">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 border rounded">
+                            <div class="text-base text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-chart-bar text-gray-400"></i>
+                                Reports (live prototype)
+                            </div>
+                            <div class="mt-2 text-xs text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                Served tickets: <strong id="served-count">0</strong>
+                            </div>
+                            <div class="mt-1 text-xs text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-users text-blue-500"></i>
+                                Queue length: <strong id="queue-length">0</strong>
+                            </div>
+                            <div class="mt-2 text-xs text-gray-600 flex items-center gap-2">
+                                <i class="fas fa-clock text-orange-500"></i>
+                                Average wait estimate: <strong id="avg-wait">0</strong> sec (prototype)
+                            </div>
+
+                            <div class="mt-3">
+                                <button id="reset-system" class="px-3 py-2 bg-red-500 text-white rounded flex items-center gap-2 hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-power-off"></i> Reset System
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-gray-50 rounded">
+                        <div class="text-base text-gray-600 flex items-center gap-2">
+                            <i class="fas fa-cogs text-gray-400"></i>
+                            System Settings
+                        </div>
+                        <div class="mt-2 flex items-center gap-2">
+                            <i class="fas fa-globe text-gray-500"></i>
+                            <label class="text-xs text-gray-600">Language (announcement)</label>
+                            <select id="system-language" class="p-2 border rounded">
+                                <option value="EN">English</option>
+                                <option value="PH">Filipino</option>
+                                <option value="BS">Bisaya</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="fixed bottom-4 left-4 right-4 md:left-auto md:right-auto md:bottom-6 md:mx-auto text-center">
+        <div class="inline-flex items-center gap-3 bg-white/90 backdrop-blur px-4 py-2 rounded shadow">
+            <div class="text-xs text-gray-600 flex items-center gap-2">
+                <i class="fas fa-flask text-gray-400"></i>
+                Prototype — click around to simulate tickets and cashier actions.
+            </div>
+            <div class="text-md font-mono text-blue-500 ml-4 flex items-center gap-3">
+                <span class="flex items-center gap-1">
+                    <i class="fas fa-list"></i>
+                    Queue: <span id="footer-queue-count">0</span>
+                </span>
+                ·
+                <span class="flex items-center gap-1">
+                    <i class="fas fa-hand-point-right"></i>
+                    Serving: <span id="footer-serving">—</span>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global state
+        let currentView = 'kiosk';
+        let nextNumber = 101;
+        let queue = [];
+        let currentServing = null;
+        let history = [];
+        let counters = ['Counter 1', 'Counter 2', 'Counter 3'];
+        let language = 'EN';
+        let announcement = '';
+
+        // Helper functions
+        function issueTicket(priority = null) {
+            const ticket = { num: nextNumber, ts: Date.now(), priority };
+            queue.push(ticket);
+            nextNumber++;
+            updateUI();
+            return ticket;
+        }
+
+        function callNext(counterLabel) {
+            if (queue.length === 0) return null;
+            
+            // Find priority tickets first
+            let idx = queue.findIndex(t => t.priority === 'EMR');
+            if (idx === -1) idx = queue.findIndex(t => t.priority === 'PWD');
+            if (idx === -1) idx = 0;
+
+            const next = queue[idx];
+            queue.splice(idx, 1);
+            currentServing = { ...next, counter: counterLabel };
+            announcement = `Now serving ${next.num} at ${counterLabel}`;
+            
+            // Clear announcement after 4 seconds
+            setTimeout(() => {
+                announcement = '';
+                updateUI();
+            }, 4000);
+            
+            updateUI();
+            return next;
+        }
+
+        function completeCurrent(status = 'COMPLETED') {
+            if (!currentServing) return;
+            history.push({ ...currentServing, status, servedAt: Date.now() });
+            currentServing = null;
+            updateUI();
+        }
+
+        function skipCurrent() {
+            if (!currentServing) return;
+            queue.push({ num: currentServing.num, ts: Date.now(), priority: null });
+            currentServing = null;
+            updateUI();
+        }
+
+        // UI Update functions
+        function updateUI() {
+            updateFooter();
+            updateDisplay();
+            updateCashier();
+            updateAdmin();
+        }
+
+        function updateFooter() {
+            document.getElementById('footer-queue-count').textContent = queue.length;
+            document.getElementById('footer-serving').textContent = currentServing ? currentServing.num : '—';
+        }
+
+        function updateDisplay() {
+            document.getElementById('current-time').querySelector('span').textContent = new Date().toLocaleString();
+            document.getElementById('counter-count').querySelector('span').textContent = `Counters: ${counters.length}`;
+            document.getElementById('serving-number').textContent = currentServing ? currentServing.num : '—';
+            document.getElementById('serving-counter').querySelector('span').textContent = currentServing ? currentServing.counter : 'Waiting';
+            
+            const announcementEl = document.getElementById('announcement-display');
+            if (announcement) {
+                announcementEl.querySelector('span').textContent = `Announcement: ${announcement}`;
+                announcementEl.classList.remove('hidden');
+            } else {
+                announcementEl.classList.add('hidden');
+            }
+
+            const queueList = document.getElementById('queue-list');
+            if (queue.length === 0) {
+                queueList.innerHTML = '<div class="text-sm text-gray-400">No waiting tickets</div>';
+            } else {
+                queueList.innerHTML = queue.slice(0, 6).map(t => `
+                    <div class="flex justify-between items-center p-2 border rounded">
+                        <div>
+                            <div class="font-bold">${t.num}</div>
+                            <div class="text-xs text-gray-400">${t.priority ? `Priority: ${t.priority}` : 'Regular'}</div>
+                        </div>
+                        <div class="text-xs text-gray-400">${new Date(t.ts).toLocaleTimeString()}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateCashier() {
+            document.getElementById('current-ticket-number').textContent = currentServing ? currentServing.num : '—';
+            document.getElementById('current-ticket-counter').querySelector('span').textContent = currentServing ? currentServing.counter : 'No one being served';
+            
+            const cashierQueueList = document.getElementById('cashier-queue-list');
+            if (queue.length === 0) {
+                cashierQueueList.innerHTML = '<div class="text-sm text-gray-400">No waiting tickets</div>';
+            } else {
+                cashierQueueList.innerHTML = queue.map(t => `
+                    <div class="flex items-center justify-between p-2 border rounded">
+                        <div>
+                            <div class="font-bold">${t.num}</div>
+                            <div class="text-xs text-gray-400">${t.priority ? `Priority: ${t.priority}` : 'Regular'}</div>
+                        </div>
+                        <div class="space-x-2">
+                            <button onclick="forceCallTicket(${t.num})" class="px-2 py-1 rounded bg-brand-green text-white text-sm">Call</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateAdmin() {
+            document.getElementById('served-count').textContent = history.length;
+            document.getElementById('queue-length').textContent = queue.length;
+            
+            const avgWait = history.length ? 
+                Math.round((history.reduce((s, h) => s + (h.servedAt - h.ts), 0) / history.length) / 1000) : 0;
+            document.getElementById('avg-wait').textContent = avgWait;
+
+            const counterList = document.getElementById('counter-list');
+            counterList.innerHTML = counters.map(c => `
+                <li class="flex justify-between items-center">
+                    <div>${c}</div>
+                    <div class="text-xs text-gray-400">remove</div>
+                </li>
+            `).join('');
+
+            // Update counter select in cashier view
+            const counterSelect = document.getElementById('counter-select');
+            counterSelect.innerHTML = counters.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        function forceCallTicket(ticketNum) {
+            const selectedCounter = document.getElementById('counter-select').value;
+            const ticketIndex = queue.findIndex(t => t.num === ticketNum);
+            if (ticketIndex !== -1) {
+                const ticket = queue[ticketIndex];
+                queue.splice(ticketIndex, 1);
+                currentServing = { ...ticket, counter: selectedCounter };
+                announcement = `Now serving ${ticket.num} at ${selectedCounter}`;
+                
+                setTimeout(() => {
+                    announcement = '';
+                    updateUI();
+                }, 4000);
+                
+                updateUI();
+            }
+        }
+
+        // Navigation
+        function showView(viewName) {
+            document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`${viewName}-view`).classList.remove('hidden');
+            
+            // Update nav buttons
+            document.querySelectorAll('[id^="nav-"]').forEach(btn => {
+                btn.className = 'px-3 py-1 rounded bg-gray-100 text-gray-700 flex items-center gap-2 hover:bg-gray-200 transition-colors';
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = icon.className.replace(/text-\S+/, '');
+            });
+            const activeBtn = document.getElementById(`nav-${viewName}`);
+            activeBtn.className = 'px-3 py-1 rounded bg-gray-100 text-brand-green flex items-center gap-2 hover:bg-gray-200 transition-colors';
+            const icon = activeBtn.querySelector('i');
+            if (icon) icon.className = icon.className.replace(/text-\S+/, '') + '';
+            
+            currentView = viewName;
+            updateUI();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation
+            document.getElementById('nav-kiosk').addEventListener('click', () => showView('kiosk'));
+            document.getElementById('nav-display').addEventListener('click', () => showView('display'));
+            document.getElementById('nav-cashier').addEventListener('click', () => showView('cashier'));
+            document.getElementById('nav-admin').addEventListener('click', () => showView('admin'));
+
+            // Kiosk
+            document.getElementById('regular-ticket').addEventListener('click', () => {
+                const ticket = issueTicket();
+                document.getElementById('ticket-number').querySelector('span').textContent = ticket.num;
+                document.getElementById('ticket-wait').querySelector('span').textContent = `Estimated wait: ~${Math.max(1, Math.ceil(queue.length / counters.length))} turns`;
+                document.getElementById('ticket-display').classList.remove('hidden');
+            });
+
+            document.getElementById('priority-ticket').addEventListener('click', () => {
+                const ticket = issueTicket('PWD');
+                document.getElementById('ticket-number').querySelector('span').textContent = ticket.num;
+                document.getElementById('ticket-wait').querySelector('span').textContent = `Estimated wait: ~${Math.max(1, Math.ceil(queue.length / counters.length))} turns`;
+                document.getElementById('ticket-display').classList.remove('hidden');
+            });
+
+            // Cashier
+            document.getElementById('call-next').addEventListener('click', () => {
+                const selectedCounter = document.getElementById('counter-select').value;
+                callNext(selectedCounter);
+            });
+
+            document.getElementById('complete-current').addEventListener('click', () => {
+                completeCurrent();
+            });
+
+            document.getElementById('skip-current').addEventListener('click', () => {
+                skipCurrent();
+            });
+
+            document.getElementById('clear-queue').addEventListener('click', () => {
+                queue = [];
+                updateUI();
+            });
+
+            document.getElementById('simulate-emergency').addEventListener('click', () => {
+                const ticket = issueTicket('EMR');
+                announcement = `Emergency ticket issued: ${ticket.num}`;
+                setTimeout(() => {
+                    announcement = '';
+                    updateUI();
+                }, 4000);
+                updateUI();
+            });
+
+            // Admin
+            document.getElementById('add-counter').addEventListener('click', () => {
+                const newCounterName = document.getElementById('new-counter-name').value.trim();
+                if (newCounterName) {
+                    counters.push(newCounterName);
+                    document.getElementById('new-counter-name').value = '';
+                    updateUI();
+                }
+            });
+
+            document.getElementById('reset-system').addEventListener('click', () => {
+                queue = [];
+                history = [];
+                currentServing = null;
+                announcement = '';
+                nextNumber = 101;
+                updateUI();
+            });
+
+            // Initialize UI
+            updateUI();
+            
+            // Update time every second
+            setInterval(() => {
+                if (currentView === 'display') {
+                    const timeSpan = document.getElementById('current-time').querySelector('span');
+                    if (timeSpan) timeSpan.textContent = new Date().toLocaleString();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

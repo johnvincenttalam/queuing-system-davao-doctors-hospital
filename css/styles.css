@@ -1,0 +1,84 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Davao Doctors Hospital Brand Colors */
+:root {
+  --dark-green: #127B3E;
+  --lime-green: #6EBF46;
+  --lemon-yellow: #FFFF00;
+  --brand-black: #000000;
+  --brand-white: #FFFFFF;
+  --lime-dark-hover: #05662e;
+  --lime-green-hover: #5ca83a;
+  --lime-green-light: #e8f5e0;
+}
+
+.hidden {
+  display: none;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+
+/* Custom brand classes */
+.bg-brand-green {
+  background-color: var(--dark-green);
+}
+
+.bg-brand-green-hover:hover {
+  background-color: var(--lime-dark-hover);
+}
+
+.bg-brand-green-light {
+  background-color: var(--lime-green-light);
+}
+
+.text-brand-green {
+  color: var(--dark-green);
+}
+
+.text-brand-yellow {
+  color: var(--lemon-yellow);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.text-brand-yellow-dark {
+  color: #e6e600;
+}
+
+/* Darker yellow for better contrast */
+.border-brand-green {
+  border-color: var(--dark-green);
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .md\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+}
